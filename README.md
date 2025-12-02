@@ -287,3 +287,161 @@ Sliding window expands until a duplicate appears →
 shrink from left until the window becomes unique again.
 
 This is the **foundation** for advanced dynamic sliding window problems.
+
+
+
+
+# 📘 **Sliding Window – Problem 3: Longest Subarray With Sum ≤ K**
+
+## 🚀 **1. Problem Statement**
+
+Given an array `nums` (non-negative integers) and an integer `k`,
+find the **length of the longest contiguous subarray** whose **sum is ≤ k**.
+
+Example:
+
+```
+nums = [2, 1, 5, 1, 3, 2], k = 7
+Output = 3     (subarray = [2, 1, 4] or [5, 1, 1])
+```
+
+---
+
+# 🧠 **2. Why Sliding Window Works**
+
+This problem works with sliding window **because all numbers are non-negative**.
+
+➡️ When you add elements, sum increases
+➡️ When you remove elements from the left, sum decreases
+
+This creates a natural **two-pointer expanding/shrinking window**.
+
+---
+
+# 🪟 **3. Sliding Window Approach**
+
+### Key idea:
+
+* Expand the window as long as the sum remains ≤ k
+* If adding the next element breaks the condition (sum > k),
+  shrink the window from the left
+* Keep track of the maximum valid window length
+
+---
+
+# 🧩 **4. Algorithm**
+
+1. Initialize:
+
+   ```
+   i = 0, j = 0
+   sum = 0
+   maxLen = 0
+   ```
+2. While `j < n`:
+
+   * Add `nums[j]` to running sum
+   * While `sum > k` → shrink from left (`i++`)
+   * Once valid (`sum <= k`) → update `maxLen`
+   * Move `j` right
+3. Return `maxLen`
+
+The window only moves forward → total complexity **O(n)**.
+
+---
+
+# 💻 **5. C++ Code**
+
+```cpp
+int longestSubarray(vector<int>& arr, int k) {
+    int n = arr.size();
+    int i = 0, j = 0;
+    long long sum = 0;
+    int maxLen = 0;
+
+    while (j < n) {
+        // expand window
+        sum += arr[j];
+
+        // shrink from left while invalid
+        while (i <= j && sum > k) {
+            sum -= arr[i];
+            i++;
+        }
+
+        // valid window => update answer
+        maxLen = max(maxLen, j - i + 1);
+
+        j++;
+    }
+
+    return maxLen;
+}
+```
+
+---
+
+# ⏱️ **6. Time & Space Complexity**
+
+| Complexity | Value    |
+| ---------- | -------- |
+| Time       | **O(n)** |
+| Space      | **O(1)** |
+
+---
+
+# 🧪 **7. Testcases**
+
+### ✅ Basic
+
+```
+nums = [2, 1, 5, 1, 3, 2], k = 7
+Output = 3
+```
+
+### ✅ Full valid window
+
+```
+nums = [1,1,1,1], k = 10
+Output = 4
+```
+
+### ❌ No valid subarray
+
+```
+nums = [8,9,10], k = 5
+Output = 0
+```
+
+### ⚠️ Single element
+
+```
+nums = [5], k = 5
+Output = 1
+```
+
+### 🔥 Large values
+
+```
+nums = [3, 3, 3, 3], k = 6
+Output = 2
+```
+
+---
+
+# 🏁 **8. Summary**
+
+Sliding window works because:
+
+* expanding window only increases sum
+* shrinking window removes elements until valid
+* window moves only forward → O(n)
+
+This is a **core dynamic sliding-window pattern** used in many subarray problems involving constraints like sum ≤ k.
+
+---
+
+If you want, I can now prepare **Problem 4 notes (Character Replacement)** or the **Sliding Window Cheatsheet**.
+
+Which one next?
+
