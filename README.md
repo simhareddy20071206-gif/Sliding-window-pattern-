@@ -137,4 +137,153 @@ Output = 24
 * Sliding removes leftmost, adds rightmost
 * Works in O(n)
 
---
+
+
+
+Welcome back 🔥
+Perfect — short breaks keep your brain sharp.
+
+Now we move to:
+
+# ⭐ **Sliding Window – Problem 2: Longest Substring Without Repeating Characters**
+
+This is one of the **core** dynamic sliding window problems used in FAANG.
+
+I’ll give you proper GitHub-ready **NOTES** in Markdown style, just like the previous problem.
+
+---
+
+# 📘 **Sliding Window – Problem 2: Longest Substring Without Repeating Characters**
+
+## 🚀 **1. Problem Statement**
+
+Given a string `s`, return the **length of the longest substring** without repeating characters.
+
+Example:
+
+```
+Input:  "abcabcbb"
+Output: 3   ("abc")
+```
+
+---
+
+# 🧠 **2. Why Sliding Window?**
+
+We expand the window (`j`) until a duplicate character appears.
+When a duplicate enters → shrink from the left (`i`) until the window becomes valid again.
+
+This gives us **O(n)** time instead of checking all substrings (O(n²)).
+
+---
+
+# 🪟 **3. Sliding Window Approach**
+
+### **Key Idea**
+
+Maintain a window where **all characters are unique**.
+
+### **To do this:**
+
+* Use a `set` or `map` to track characters
+* Expand window until you hit a duplicate
+* When duplicate found → remove from left until duplicate is removed
+* Update `maxLen` whenever window is valid
+
+---
+
+# 🧩 **4. Algorithm Steps**
+
+1. Create a set `st` to store characters in the current window
+2. Initialize `i = 0`, `j = 0`
+3. While `j < n`:
+
+   * If `s[j]` not in set → insert it, update `maxLen`
+   * Else (duplicate found):
+
+     * Remove characters starting from `i` until duplicate is removed
+   * Move `j`
+4. Return `maxLen`
+
+---
+
+# 💻 **5. C++ Code**
+
+```cpp
+int lengthOfLongestSubstring(string s) {
+    unordered_set<char> st;
+    int i = 0, j = 0, maxLen = 0;
+    int n = s.length();
+
+    while (j < n) {
+        if (st.find(s[j]) == st.end()) {
+            // Expand window
+            st.insert(s[j]);
+            maxLen = max(maxLen, j - i + 1);
+            j++;
+        } else {
+            // Shrink window
+            st.erase(s[i]);
+            i++;
+        }
+    }
+    return maxLen;
+}
+```
+
+---
+
+# ⏱️ **6. Time & Space Complexity**
+
+| Complexity | Value                                 |
+| ---------- | ------------------------------------- |
+| Time       | **O(n)**                              |
+| Space      | **O(k)** (max unique chars in window) |
+
+---
+
+# 🧪 **7. Testcases**
+
+### ✅ Basic
+
+```
+s = "abcabcbb"
+Output = 3
+```
+
+### ✅ All characters same
+
+```
+s = "bbbbbb"
+Output = 1
+```
+
+### ✅ Long unique substring
+
+```
+s = "pwwkew"
+Output = 3   ("wke")
+```
+
+### ✅ Single character
+
+```
+s = "a"
+Output = 1
+```
+
+### ✅ Empty string
+
+```
+s = ""
+Output = 0
+```
+
+---
+
+# 🏁 **8. Summary**
+
+Sliding window expands until a duplicate appears →
+shrink from left until the window becomes unique again.
+
+This is the **foundation** for advanced dynamic sliding window problems.
