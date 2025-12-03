@@ -443,5 +443,110 @@ This is a **core dynamic sliding-window pattern** used in many subarray problems
 
 If you want, I can now prepare **Problem 4 notes (Character Replacement)** or the **Sliding Window Cheatsheet**.
 
-Which one next?
+
+
+# 📘 **Minimum Window Substring — Sliding Window (Hard)**
+
+## 🚀 **Problem**
+
+Given strings `s` and `t`, return the **smallest substring of `s`** that contains **all characters of `t`** (including duplicates).
+If no such substring exists, return `""`.
+
+---
+
+## 🧠 **Core Idea (High-Level)**
+
+We use a **dynamic sliding window** and track:
+
+* `need[c]` → how many of each char we still need
+* `required` → total characters still missing
+* When `required == 0` → window is VALID
+* Shrink from the left to make it as small as possible
+
+This is the **reverse** of normal sliding window:
+Expand → shrink → update minimum.
+
+---
+
+## 🪟 **Algorithm (Short)**
+
+1. Build frequency array `need` for string `t`.
+2. Expand window using `j++`:
+
+   * Decrease `need[s[j]]`.
+   * If `need[s[j]] > 0` before decreasing → reduce `required`.
+3. When `required == 0`:
+
+   * Window is valid → try shrinking with `i++`.
+   * Update `minLen` and `start` if smaller window found.
+   * If shrinking breaks validity → `required++`.
+4. Return `s.substr(start, minLen)`.
+
+---
+
+## 💻 **Code (clean + optimal)**
+
+```cpp
+string minWindow(string s, string t) {
+    if (t.size() > s.size()) return "";
+
+    vector<int> need(128, 0);
+    for (char c : t) need[c]++;
+
+    int required = t.size();
+    int i = 0, j = 0;
+    int minLen = INT_MAX, start = 0;
+
+    while (j < s.size()) {
+        if (need[s[j]] > 0) required--;
+        need[s[j]]--;
+        j++;
+
+        while (required == 0) {
+            if (j - i < minLen) {
+                minLen = j - i;
+                start = i;
+            }
+            need[s[i]]++;
+            if (need[s[i]] > 0) required++;
+            i++;
+        }
+    }
+
+    return minLen == INT_MAX ? "" : s.substr(start, minLen);
+}
+```
+
+---
+
+## ⏱️ **Complexity**
+
+| Part  | Value                                       |
+| ----- | ------------------------------------------- |
+| Time  | **O(n)** — each index visited at most twice |
+| Space | **O(1)** — only 128-sized arrays            |
+
+---
+
+## 🧪 **Good Testcases**
+
+```
+Input:  s = "ADOBECODEBANC", t = "ABC"
+Output: "BANC"
+
+Input:  s = "a", t = "a"
+Output: "a"
+
+Input:  s = "a", t = "aa"
+Output: ""
+
+Input:  s = "aa", t = "aa"
+Output: "aa"
+
+Input:  s = "abc", t = "cba"
+Output: "abc"
+```
+
+---
+
 
