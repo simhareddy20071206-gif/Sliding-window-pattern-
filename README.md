@@ -549,4 +549,149 @@ Output: "abc"
 
 ---
 
+Absolutely — I’ll give you **clean SHORT NOTES** for both problems (Problem 4: *Maximum Number of Replaceable Characters / Longest Repeating Character Replacement* and Problem 5: *Minimum Window Substring*).
+
+These are **pattern notes**, not solutions**, and fully aligned with Study Mode:
+– short
+– conceptual
+– highlight when to expand + when to shrink
+– what variables matter
+– how to detect validity
+
+(These are the exact notes you should keep for revision.)
+
+---
+
+# ⭐ **Problem 4 — Longest Repeating Character Replacement**
+
+### (a.k.a. Maximum Number of Replaceable Characters)
+
+### **Pattern**: Sliding Window (Variable Size)
+
+---
+
+# 🔑 **Core Idea**
+
+You want the **longest substring** where you can **replace at most `k` characters** to make all characters the same.
+
+---
+
+# 🔧 **Key Insight**
+
+In any window:
+
+👉 **Number of replacements needed**
+= `window_size - count_of_most_frequent_character_in_window`
+
+Window is **valid** if:
+
+```
+(window_size - maxFreq) <= k
+```
+
+We do NOT track which character we convert to — we only care about `maxFreq`.
+
+---
+
+# 🧠 **Variables**
+
+* `left`, `right`
+* `freq[26]` → frequency of chars in current window
+* `maxFreq` → **the highest frequency of any character** in the window
+* window is valid when `(right-left+1) - maxFreq ≤ k`
+
+---
+
+# 📌 **Flow**
+
+1. Expand right.
+2. Update freq and update `maxFreq`.
+3. If window becomes **invalid**, shrink from left.
+4. Keep track of **maximum window size** seen while valid.
+
+---
+
+# 🚫 **Important Mistake to Avoid**
+
+❌ Don’t decrease `maxFreq` when shrinking the window.
+Because it doesn’t break correctness (the window will still shrink properly).
+
+---
+
+# 📝 **One-line summary**
+
+> **Make the window as large as possible while you can fix it with at most `k` replacements.**
+
+---
+
+---
+
+# ⭐ **Problem 5 — Minimum Window Substring**
+
+### **Pattern**: Sliding Window (Variable Size + Frequency Map)
+
+---
+
+# 🔑 **Core Idea**
+
+Find the **smallest substring** that contains **all characters of `t` with required frequencies**.
+
+---
+
+# 🧠 **Variables**
+
+* `need` → frequency of characters in `t`
+* `window` → frequency in current window
+* `needCount = number of unique characters in t`
+* `haveCount = number of characters whose required frequency is satisfied`
+* `left`, `right`
+* `best_start`, `best_length`
+
+---
+
+# 📌 **Flow**
+
+1. Expand right → add characters to window
+2. When a character’s freq hits required freq → `haveCount++`
+3. When `haveCount == needCount`, window is **valid**
+4. **Shrink** from left while window is valid:
+
+   * update best (minimum) window
+   * remove `s[left]` from window
+   * if removing makes freq < required → `haveCount--`
+   * then move `left++`
+5. Continue until right reaches end.
+
+---
+
+# 🧠 **When does the window become valid?**
+
+When **all required unique characters** meet their required frequencies:
+
+```
+haveCount == needCount
+```
+
+Not when “all characters appear” — frequency matters.
+
+---
+
+# ⚠️ **Critical Detail**
+
+We decrement `haveCount` **ONLY** when removing a char makes:
+
+```
+window[c] < need[c]
+```
+
+This is what breaks the window validity.
+
+---
+
+# 📝 **One-line summary**
+
+> **Expand to satisfy all frequencies, shrink to find the smallest valid window.**
+
+---
+
 
